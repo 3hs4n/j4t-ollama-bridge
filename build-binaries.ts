@@ -4,7 +4,7 @@ import { chmod, cp, mkdir, rm, writeFile } from 'node:fs/promises'
 // Bridge entrypoint: `tools/ollama-bridge/serve.ts` in the monorepo, or root
 // `serve.ts` in the standalone public repo (override via J4T_BRIDGE_SERVE).
 const SERVE = process.env.J4T_BRIDGE_SERVE ?? 'serve.ts'
-const VERSION = process.env.J4T_BRIDGE_VERSION ?? '1.0.1'
+const VERSION = process.env.J4T_BRIDGE_VERSION ?? '1.0.2'
 const OUT = 'dist-bridge'
 const STAGE = `${OUT}/.stage`
 const BIN = 'j4t-ollama-bridge'
@@ -79,6 +79,9 @@ for (const { target, pkg, kind } of targets) {
     await writeFile(`${appDir}/Contents/MacOS/launcher`, APP_LAUNCHER)
     await chmod(`${appDir}/Contents/MacOS/launcher`, 0o755)
     await chmod(`${appDir}/Contents/Resources/${BIN}`, 0o755)
+    // Ad-hoc sign the bundle so macOS shows a bypassable "unidentified developer"
+    // prompt instead of refusing it as "damaged" (which a fully unsigned bundle is).
+    await $`codesign --force --deep --sign - ${appDir}`
     // Drag-to-install disk image: the app shown next to an Applications shortcut.
     await $`ln -s /Applications ${root}/Applications`
     await $`hdiutil create -volname ${VOLNAME} -srcfolder ${root} -ov -format UDZO ${OUT}/${dirName}.dmg`
