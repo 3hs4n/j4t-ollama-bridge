@@ -16,18 +16,33 @@ it('merges env origins onto the defaults', () => {
   expect(parseAllowlist('https://x.test, https://y.test')).toEqual([
     'https://www.job4talents.at',
     'https://job4talents.at',
+    'https://www.job4talents.com',
+    'https://job4talents.com',
+    'https://www.job4talents.de',
+    'https://job4talents.de',
+    'https://www.job4talents.ch',
+    'https://job4talents.ch',
     'https://x.test',
     'https://y.test',
   ])
   expect(parseAllowlist(undefined)).toEqual([
     'https://www.job4talents.at',
     'https://job4talents.at',
+    'https://www.job4talents.com',
+    'https://job4talents.com',
+    'https://www.job4talents.de',
+    'https://job4talents.de',
+    'https://www.job4talents.ch',
+    'https://job4talents.ch',
   ])
 })
 
 it('allows configured + any localhost origin, denies unknown', () => {
   const list = parseAllowlist(undefined)
   expect(isOriginAllowed('https://www.job4talents.at', list)).toBe(true)
+  expect(isOriginAllowed('https://job4talents.com', list)).toBe(true)
+  expect(isOriginAllowed('https://www.job4talents.de', list)).toBe(true)
+  expect(isOriginAllowed('https://job4talents.ch', list)).toBe(true)
   expect(isOriginAllowed('http://localhost:5173', list)).toBe(true)
   expect(isOriginAllowed('https://attacker.test', list)).toBe(false)
   expect(isOriginAllowed(null, list)).toBe(false)

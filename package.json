@@ -1,6 +1,6 @@
 {
   "name": "j4t-ollama-bridge",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Local reverse proxy that lets the job4talents.at web app read your local Ollama from the browser (adds the CORS + Private Network Access headers Ollama can't).",
   "type": "module",
   "scripts": {

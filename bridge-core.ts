@@ -1,6 +1,12 @@
 export const DEFAULT_ORIGINS = [
   'https://www.job4talents.at',
   'https://job4talents.at',
+  'https://www.job4talents.com',
+  'https://job4talents.com',
+  'https://www.job4talents.de',
+  'https://job4talents.de',
+  'https://www.job4talents.ch',
+  'https://job4talents.ch',
 ]
 
 export function isLocalhostTarget(url: string): boolean {

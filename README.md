@@ -1,7 +1,7 @@
 # j4t Local Ollama Bridge
 
-A tiny local reverse proxy that lets the **public** job4talents.at web app read your
-**local** Ollama API from the browser.
+A tiny local reverse proxy that lets the **public** job4talents web app (`.at`, `.com`,
+`.de`, `.ch`) read your **local** Ollama API from the browser.
 
 ## Why this exists
 
@@ -28,23 +28,28 @@ Then in the app's AI settings the local connection works automatically (the app
 auto-detects the bridge). Default listen address: `http://127.0.0.1:11435`,
 forwarding to Ollama at `http://127.0.0.1:11434`.
 
-Standalone binaries (no Bun required) are published on GitHub Releases — download,
-double-click, done.
+**Installers** (no Bun required) are published on GitHub Releases — grab the one for
+your OS:
+
+- **macOS:** `…-macos-arm64.dmg` (Apple Silicon) or `…-macos-x64.dmg` (Intel) — open the
+  disk image and drag **j4t Ollama Bridge** to Applications, then launch it.
+- **Windows:** `…-windows-x64.exe` — double-click.
+- **Linux:** `…-linux-x64.tar.gz` — extract and run `./start.sh`.
 
 ## Configuration (env vars)
 
-| Var                  | Default                  | Purpose                                                                        |
-| -------------------- | ------------------------ | ------------------------------------------------------------------------------ |
-| `J4T_BRIDGE_PORT`    | `11435`                  | Port the bridge listens on (loopback only).                                    |
-| `J4T_BRIDGE_TARGET`  | `http://127.0.0.1:11434` | The Ollama server to forward to. Must be localhost.                            |
-| `J4T_BRIDGE_ORIGINS` | —                        | Extra allowed origins, comma-separated (added to the job4talents.at defaults). |
+| Var                  | Default                  | Purpose                                                                                      |
+| -------------------- | ------------------------ | -------------------------------------------------------------------------------------------- |
+| `J4T_BRIDGE_PORT`    | `11435`                  | Port the bridge listens on (loopback only).                                                  |
+| `J4T_BRIDGE_TARGET`  | `http://127.0.0.1:11434` | The Ollama server to forward to. Must be localhost.                                          |
+| `J4T_BRIDGE_ORIGINS` | —                        | Extra allowed origins, comma-separated (added to the job4talents .at/.com/.de/.ch defaults). |
 
 ## Security
 
 - Binds `127.0.0.1` only — not reachable from your network.
 - Forwards **only** to a localhost target; a non-localhost target is refused at startup.
-- Reflects `Access-Control-Allow-Origin` only for allowed origins (job4talents.at +
-  any localhost); unknown sites get no allow-origin, so they cannot read your local
+- Reflects `Access-Control-Allow-Origin` only for allowed origins (the job4talents
+  `.at`/`.com`/`.de`/`.ch` domains + any localhost); unknown sites get no allow-origin, so they cannot read your local
   Ollama through the bridge. Worst case is no worse than a site reaching Ollama directly.
 - No request or response bodies are ever logged.
 
