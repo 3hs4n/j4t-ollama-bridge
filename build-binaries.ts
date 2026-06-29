@@ -4,7 +4,7 @@ import { chmod, cp, mkdir, rm, writeFile } from 'node:fs/promises'
 // Bridge entrypoint: `tools/ollama-bridge/serve.ts` in the monorepo, or root
 // `serve.ts` in the standalone public repo (override via J4T_BRIDGE_SERVE).
 const SERVE = process.env.J4T_BRIDGE_SERVE ?? 'serve.ts'
-const VERSION = process.env.J4T_BRIDGE_VERSION ?? '1.0.2'
+const VERSION = process.env.J4T_BRIDGE_VERSION ?? '1.0.3'
 const OUT = 'dist-bridge'
 const STAGE = `${OUT}/.stage`
 const BIN = 'j4t-ollama-bridge'
@@ -64,7 +64,9 @@ await mkdir(OUT, { recursive: true })
 
 for (const { target, pkg, kind } of targets) {
   if (only && !target.includes(only)) continue
-  const dirName = `${BIN}-${pkg}`
+  // Version-stamp the artifact name so downloads are self-identifying and a new
+  // release never collides with a cached older asset of the same name.
+  const dirName = `${BIN}-v${VERSION}-${pkg}`
   const stage = `${STAGE}/${pkg}`
   await mkdir(stage, { recursive: true })
   console.log(`Building ${pkg}…`)
