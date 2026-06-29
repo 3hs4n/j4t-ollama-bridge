@@ -4,7 +4,7 @@ import {
   parseAllowlist,
 } from './bridge-core'
 
-const VERSION = '1.0.2'
+const VERSION = '1.0.3'
 const PORT = Number(process.env.J4T_BRIDGE_PORT ?? 11435)
 const TARGET = process.env.J4T_BRIDGE_TARGET ?? 'http://127.0.0.1:11434'
 const ALLOWLIST = parseAllowlist(process.env.J4T_BRIDGE_ORIGINS)
