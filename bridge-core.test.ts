@@ -48,7 +48,7 @@ it('allows configured + any localhost origin, denies unknown', () => {
   expect(isOriginAllowed(null, list)).toBe(false)
 })
 
-it('always emits the Private-Network header; ACAO only for allowed origins', () => {
+it('emits CORS + Private-Network only for allowed origins', () => {
   const list = parseAllowlist(undefined)
   const ok = buildCorsHeaders(
     'https://www.job4talents.at',
@@ -59,8 +59,10 @@ it('always emits the Private-Network header; ACAO only for allowed origins', () 
   expect(ok['Access-Control-Allow-Origin']).toBe('https://www.job4talents.at')
   expect(ok['Access-Control-Allow-Headers']).toBe('content-type')
 
+  // A denied origin gets neither ACAO nor the Private-Network grant, so its
+  // PNA preflight fails and it cannot reach the local bridge.
   const denied = buildCorsHeaders('https://attacker.test', list, null)
-  expect(denied['Access-Control-Allow-Private-Network']).toBe('true')
+  expect(denied['Access-Control-Allow-Private-Network']).toBe(undefined)
   expect(denied['Access-Control-Allow-Origin']).toBe(undefined)
   expect(denied['Access-Control-Allow-Headers']).toBe('*')
 })

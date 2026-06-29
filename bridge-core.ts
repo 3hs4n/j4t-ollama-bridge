@@ -54,13 +54,17 @@ export function buildCorsHeaders(
     'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
     'Access-Control-Allow-Headers':
       requestHeaders && requestHeaders.length > 0 ? requestHeaders : '*',
-    'Access-Control-Allow-Private-Network': 'true',
     'Access-Control-Max-Age': '600',
     'Access-Control-Expose-Headers': '*',
     Vary: 'Origin',
   }
+  // Grant CORS *and* Private Network Access only to allowlisted origins. Sending
+  // Access-Control-Allow-Private-Network for every origin let any public website
+  // clear the browser's PNA preflight and probe/reach the local bridge; a denied
+  // origin must receive neither header so its preflight fails.
   if (origin && isOriginAllowed(origin, allowlist)) {
     headers['Access-Control-Allow-Origin'] = origin
+    headers['Access-Control-Allow-Private-Network'] = 'true'
   }
   return headers
 }
